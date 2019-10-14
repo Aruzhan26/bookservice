@@ -1,9 +1,10 @@
 package com.example.bookcatalogservice.resources;
 
-import com.example.bookcatalogservice.models.Book;
-import com.example.bookcatalogservice.models.CatalogItem;
-import com.example.bookcatalogservice.models.Rating;
+import com.example.bookcatalogservice.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,18 +23,19 @@ public class BookCatalogResource {
     private RestTemplate restTemplate;
 
     @Autowired
+    private DiscoveryClient discoveryClient;
+
+    @Autowired
     private WebClient.Builder webClientBuilder;
 
     @RequestMapping("/{userId}")
     public List<CatalogItem> getCatalog(@PathVariable("userId") String userId){
 
-        List<Rating> ratings = Arrays.asList(
-                new Rating("123",5) ,
-                new Rating("456",4)
-        );
+        UserRating ratings = restTemplate.getForObject("http://book-rating-service/rating/users/"+userId, UserRating.class);
+        UserReaded readings = restTemplate.getForObject("http://book-readed-service/readed/users/"+userId, UserReaded.class);
 
-        return ratings.stream().map(rating -> {
-            Book book = restTemplate.getForObject("http://localhost:8082/book/" + rating.getBookId(), Book.class);
+      return ratings.getUserRating().stream().map(rating -> {
+            Book book = restTemplate.getForObject("http://book-info-service/book/" + rating.getBookId(), Book.class);
 
             /*Book book = webClientBuilder.build()
                     .get()
@@ -45,5 +47,14 @@ public class BookCatalogResource {
             return new CatalogItem(book.getName(),"desc1",rating.getRating());
         })
                 .collect(Collectors.toList());
+
+    }
+
+    public String greeting(
+            @PathVariable("userId") String userId, Model model
+    ){
+        String result = getCatalog(userId).toString();
+        model.addAttribute(result);
+        return "catalog";
     }
 }

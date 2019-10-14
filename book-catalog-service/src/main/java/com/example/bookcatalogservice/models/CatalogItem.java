@@ -5,11 +5,21 @@ public class CatalogItem {
     private String name;
     private String desc;
     private int rating;
+    //private String read;
 
+   /* public String getRead() {
+        return read;
+    }
+
+    public void setRead(String read) {
+        this.read = read;
+    }
+*/
     public CatalogItem(String name, String desc, int rating) {
         this.name = name;
         this.desc = desc;
         this.rating = rating;
+        //this.read = read;
     }
 
     public String getName() {

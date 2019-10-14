@@ -1,4 +1,4 @@
-package com.example.bookreadedservice.models;
+package com.example.bookcatalogservice.models;
 
 public class Readed {
     private String bookId;
@@ -7,7 +7,7 @@ public class Readed {
     public Readed() {
     }
 
-    public Readed( String bookId, String readed) {
+    public Readed(String bookId, String readed) {
         this.bookId = bookId;
         this.readed = readed;
     }
