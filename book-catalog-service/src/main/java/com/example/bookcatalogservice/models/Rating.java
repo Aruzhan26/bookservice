@@ -3,13 +3,15 @@ package com.example.bookcatalogservice.models;
 public class Rating {
     private String bookId;
     private int rating;
+    private String userId;
 
-    public Rating() {
+    public Rating(String s, int i) {
     }
 
-    public Rating(String bookId, int rating) {
+    public Rating(String bookId, int rating,String userId) {
         this.bookId = bookId;
         this.rating = rating;
+        this.userId = userId;
     }
 
     public String getBookId() {
@@ -26,5 +28,13 @@ public class Rating {
 
     public void setRating(int rating) {
         this.rating = rating;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }
